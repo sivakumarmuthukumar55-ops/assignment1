@@ -146,14 +146,16 @@ def show_dashboard():
     k3.metric("Pending", f"₹{t_pen:,.0f}")
 
     # --- CHARTS ---
+ 
     st.divider()
-    c1, c2 = st.columns(2)
-    with c1:
-        st.subheader("Product-wise Sales")
-        st.bar_chart(df.groupby('product_name')['gross_sales'].sum(), use_container_width=True)
-    with c2:
-        st.subheader("Branch-wise Sales")
-        st.bar_chart(df.groupby('branch_name')['gross_sales'].sum(), use_container_width=True)
+    
+    # 1. Product-wise Sales (Visible to Everyone)
+    st.subheader("📦 Product-wise Sales")
+    st.bar_chart(df.groupby('product_name')['gross_sales'].sum(), use_container_width=True)
+    if user['role'] == 'Super Admin':
+        st.divider() # Optional: add a line to separate 
+        st.subheader("🏢 Branch-wise Performance")
+        st.bar_chart(df.groupby('branch_name')['gross_sales'].sum(), use_container_width=True)    
 
     # --- DATA TABLE ---
     st.subheader("Detailed Sales Data")
